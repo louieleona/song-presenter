@@ -39,13 +39,16 @@ export default function LivePage({ session, onSessionChange }: LivePageProps) {
     <div className="relative w-full h-screen overflow-hidden">
       {/* Background layer */}
       <AnimatedBackground
+        key={session.currentSongId || 'no-song'}
         tempo={currentSong?.tempo || 'slow'}
         gradient={currentSong?.gradient}
+        animationSettings={currentSong?.animationSettings}
       />
 
       {/* Content layer */}
       <div className="relative z-10">
         <LyricsDisplay
+          key={`${session.currentSongId}-${session.currentPartIndex}`}
           part={currentPart}
           songTitle={currentSong?.title || ''}
         />

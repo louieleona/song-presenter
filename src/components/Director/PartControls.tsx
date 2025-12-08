@@ -3,14 +3,18 @@ import { getPartLabel } from '../../utils/markdownParser';
 
 interface PartControlsProps {
   song: Song | null;
+  songs: Song[];
   currentPartIndex: number;
   onPartSelected: (index: number) => void;
+  onSongSelected: (songId: string) => void;
 }
 
 export default function PartControls({
   song,
+  songs,
   currentPartIndex,
   onPartSelected,
+  onSongSelected,
 }: PartControlsProps) {
   if (!song) {
     return (
@@ -81,22 +85,30 @@ export default function PartControls({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex gap-3 mt-6 pt-4 border-t border-gray-200">
+      <div className="flex gap-2 mt-4 pt-3 border-t border-gray-200">
         <button
-          onClick={() => onPartSelected(Math.max(0, currentPartIndex - 1))}
-          disabled={currentPartIndex === 0}
-          className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
+          onClick={() => {
+            const currentIndex = songs.findIndex(s => s.id === song.id);
+            if (currentIndex > 0) {
+              onSongSelected(songs[currentIndex - 1].id);
+            }
+          }}
+          disabled={songs.findIndex(s => s.id === song.id) === 0}
+          className="flex-1 px-3 py-1.5 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
         >
-          ← Previous
+          ← Previous Song
         </button>
         <button
-          onClick={() =>
-            onPartSelected(Math.min(song.parts.length - 1, currentPartIndex + 1))
-          }
-          disabled={currentPartIndex === song.parts.length - 1}
-          className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
+          onClick={() => {
+            const currentIndex = songs.findIndex(s => s.id === song.id);
+            if (currentIndex < songs.length - 1) {
+              onSongSelected(songs[currentIndex + 1].id);
+            }
+          }}
+          disabled={songs.findIndex(s => s.id === song.id) === songs.length - 1}
+          className="flex-1 px-3 py-1.5 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
         >
-          Next →
+          Next Song →
         </button>
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LandingPage from './components/Landing/LandingPage';
 import DirectorPage from './components/Director/DirectorPage';
 import LivePage from './components/Live/LivePage';
 import { useSessionState } from './hooks/useSessionState';
@@ -16,7 +17,7 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/director" replace />} />
+      <Route path="/" element={<LandingPage />} />
       <Route
         path="/director"
         element={<DirectorPage session={session} onSessionChange={setSession} />}

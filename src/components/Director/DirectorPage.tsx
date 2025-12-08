@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Song, Session, GradientTheme } from '../../types/song';
+import { Song, Session, GradientTheme, AnimationSettings } from '../../types/song';
 import { parseSongMarkdown } from '../../utils/markdownParser';
 import { exportAsJSON, importFromJSON } from '../../utils/exportSession';
 import { useBroadcastSync } from '../../hooks/useBroadcastSync';
 import Navigation from '../Shared/Navigation';
-import UploadZone from './UploadZone';
 import SongList from './SongList';
 import SongEditor from './SongEditor';
 import PartControls from './PartControls';
@@ -95,16 +94,9 @@ export default function DirectorPage({ session, onSessionChange }: DirectorPageP
     }
   };
 
-  const handleSetTempo = (songId: string, tempo: 'slow' | 'fast') => {
+  const handleSetAnimationSettings = (songId: string, animationSettings: AnimationSettings) => {
     const updatedSongs = session.songs.map((s) =>
-      s.id === songId ? { ...s, tempo } : s
-    );
-    updateSession({ ...session, songs: updatedSongs });
-  };
-
-  const handleSetGradient = (songId: string, gradient: GradientTheme) => {
-    const updatedSongs = session.songs.map((s) =>
-      s.id === songId ? { ...s, gradient } : s
+      s.id === songId ? { ...s, animationSettings } : s
     );
     updateSession({ ...session, songs: updatedSongs });
   };
@@ -151,52 +143,25 @@ export default function DirectorPage({ session, onSessionChange }: DirectorPageP
 
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">Song Presenter - Director</h1>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setIsCreatingNew(true)}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              + New Song
-            </button>
-            <button
-              onClick={handleImportJSON}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-            >
-              Import Collection
-            </button>
-            <button
-              onClick={() => exportAsJSON(session.songs)}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Export Collection
-            </button>
-            <button
-              onClick={handleNewSession}
-              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              New Session
-            </button>
-          </div>
-        </div>
+        <h1 className="text-2xl font-bold text-gray-800">Song Presenter - Director</h1>
       </header>
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar - Song List */}
-        <aside className="w-80 bg-white border-r border-gray-200 p-4 overflow-y-auto">
-          <div className="mb-4">
-            <UploadZone onFilesSelected={handleFilesSelected} />
-          </div>
+        <aside className="w-80 bg-white border-r border-gray-200 p-4 flex flex-col">
           <SongList
             songs={session.songs}
             currentSongId={session.currentSongId}
             onSelectSong={handleSelectSong}
             onDeleteSong={handleDeleteSong}
             onEditSong={setEditingSong}
-            onSetTempo={handleSetTempo}
-            onSetGradient={handleSetGradient}
+            onSetAnimationSettings={handleSetAnimationSettings}
+            onFilesSelected={handleFilesSelected}
+            onNewSong={() => setIsCreatingNew(true)}
+            onImportCollection={handleImportJSON}
+            onExportCollection={() => exportAsJSON(session.songs)}
+            onNewSession={handleNewSession}
           />
         </aside>
 
@@ -204,8 +169,10 @@ export default function DirectorPage({ session, onSessionChange }: DirectorPageP
         <main className="flex-1 p-6 overflow-y-auto">
           <PartControls
             song={currentSong}
+            songs={session.songs}
             currentPartIndex={session.currentPartIndex}
             onPartSelected={handlePartSelected}
+            onSongSelected={handleSelectSong}
           />
         </main>
       </div>

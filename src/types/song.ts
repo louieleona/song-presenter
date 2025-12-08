@@ -8,11 +8,24 @@ export interface SongPart {
 
 export type GradientTheme = 'blue' | 'purple' | 'green' | 'orange' | 'pink' | 'cyan';
 
+export type AnimationEffect = 'particles';
+
+export interface AnimationSettings {
+  effect: AnimationEffect;
+  particleCount: number;
+  particleSize: number;
+  speed: number;
+  particleColor: string;
+  particleBlur: number;
+  backgroundColor: GradientTheme;
+}
+
 export interface Song {
   id: string;
   title: string;
   tempo: 'slow' | 'fast';
   gradient?: GradientTheme;
+  animationSettings?: AnimationSettings;
   parts: SongPart[];
   rawMarkdown: string;
 }

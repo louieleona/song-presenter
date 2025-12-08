@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { GradientTheme } from '../../types/song';
+import { GradientTheme, AnimationSettings } from '../../types/song';
 
 interface AnimatedBackgroundProps {
   tempo: 'slow' | 'fast';
   gradient?: GradientTheme;
+  animationSettings?: AnimationSettings;
 }
 
 const gradientThemes = {
@@ -45,10 +46,22 @@ const gradientThemes = {
   },
 };
 
-export default function AnimatedBackground({ tempo, gradient = 'blue' }: AnimatedBackgroundProps) {
-  const theme = gradientThemes[gradient];
+export default function AnimatedBackground({
+  tempo,
+  gradient = 'blue',
+  animationSettings
+}: AnimatedBackgroundProps) {
+  // Use custom settings or fallback to defaults
+  const bgTheme = animationSettings?.backgroundColor || gradient;
+  const particleCount = animationSettings?.particleCount || (tempo === 'fast' ? 80 : 40);
+  const particleSize = animationSettings?.particleSize || 3;
+  const speed = animationSettings?.speed || 5;
+  const particleColor = animationSettings?.particleColor || '#ffffff';
+  const particleBlur = animationSettings?.particleBlur ?? 2;
 
-  // Memoize stars so they don't regenerate on every render
+  const theme = gradientThemes[bgTheme];
+
+  // Memoize stars for twinkle effect
   const stars = useMemo(
     () =>
       Array.from({ length: 100 }, (_, i) => ({
@@ -61,22 +74,48 @@ export default function AnimatedBackground({ tempo, gradient = 'blue' }: Animate
     []
   );
 
-  // Generate lights based on tempo - use gradient as key to force regeneration on song change
-  const lightCount = tempo === 'fast' ? 80 : 40;
-  const lights = useMemo(
+  // Generate particles with random positions
+  const particles = useMemo(
     () =>
-      Array.from({ length: lightCount }, (_, i) => ({
+      Array.from({ length: particleCount }, (_, i) => ({
         id: i,
-        left: (i * 97) % 100, // More distributed positioning
-        delay: (i * 2.3) % 15, // Pseudo-random but consistent
-        size: tempo === 'fast' ? 2.5 + ((i * 1.7) % 4) : 1.5 + ((i * 1.7) % 2.5),
+        left: Math.random() * 100,
+        delay: Math.random() * 15,
+        size: particleSize + (Math.random() * particleSize),
       })),
-    [lightCount, tempo, gradient]
+    [particleCount, particleSize, bgTheme]
   );
+
+  // Render rising particles
+  const renderParticles = () => {
+    return (
+      <>
+        {particles.map((particle) => (
+          <div
+            key={`particle-${particle.id}`}
+            className={`absolute rounded-full ${
+              tempo === 'fast' ? 'animate-rise-fast' : 'animate-rise-slow'
+            }`}
+            style={{
+              left: `${particle.left}%`,
+              bottom: '-5%',
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              backgroundColor: particleColor,
+              filter: `blur(${particleBlur}px)`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: speed > 5 ? `${10 - speed}s` : `${10 + (5 - speed) * 2}s`,
+              boxShadow: `0 0 ${particle.size * 2}px ${particleColor}`,
+            }}
+          />
+        ))}
+      </>
+    );
+  };
 
   return (
     <div className={`absolute inset-0 w-full h-full overflow-hidden bg-gradient-to-b ${theme.bg}`}>
-      {/* Constellation stars - twinkling */}
+      {/* Background stars - always show for atmosphere */}
       {stars.map((star) => (
         <div
           key={`star-${star.id}`}
@@ -92,50 +131,37 @@ export default function AnimatedBackground({ tempo, gradient = 'blue' }: Animate
         />
       ))}
 
-      {/* Rising lights/particles */}
-      {lights.map((light) => (
-        <div
-          key={`light-${light.id}`}
-          className={`absolute rounded-full bg-gradient-to-t ${theme.particles} ${
-            tempo === 'fast' ? 'animate-rise-fast' : 'animate-rise-slow'
-          }`}
-          style={{
-            left: `${light.left}%`,
-            bottom: '-5%',
-            width: `${light.size}px`,
-            height: `${light.size}px`,
-            animationDelay: `${light.delay}s`,
-            boxShadow: `0 0 ${light.size * 2}px ${theme.glow}`,
-          }}
-        />
-      ))}
+      {/* Render rising particles */}
+      {renderParticles()}
 
-      {/* Constellation lines - connecting some stars */}
-      <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none">
-        <defs>
-          <linearGradient id={`lineGradient-${gradient}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={theme.lines} />
-            <stop offset="100%" stopColor="rgba(147, 197, 253, 0.1)" />
-          </linearGradient>
-        </defs>
-        {stars.slice(0, 15).map((star, i) => {
-          if (i === 0) return null;
-          const prevStar = stars[i - 1];
-          return (
-            <line
-              key={`line-${i}`}
-              x1={`${prevStar.left}%`}
-              y1={`${prevStar.top}%`}
-              x2={`${star.left}%`}
-              y2={`${star.top}%`}
-              stroke={`url(#lineGradient-${gradient})`}
-              strokeWidth="0.5"
-              className="animate-pulse"
-              style={{ animationDuration: '4s' }}
-            />
-          );
-        })}
-      </svg>
+      {/* Constellation lines for atmosphere */}
+      {(
+        <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none">
+          <defs>
+            <linearGradient id={`lineGradient-${bgTheme}`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={theme.lines} />
+              <stop offset="100%" stopColor="rgba(147, 197, 253, 0.1)" />
+            </linearGradient>
+          </defs>
+          {stars.slice(0, 15).map((star, i) => {
+            if (i === 0) return null;
+            const prevStar = stars[i - 1];
+            return (
+              <line
+                key={`line-${i}`}
+                x1={`${prevStar.left}%`}
+                y1={`${prevStar.top}%`}
+                x2={`${star.left}%`}
+                y2={`${star.top}%`}
+                stroke={`url(#lineGradient-${bgTheme})`}
+                strokeWidth="0.5"
+                className="animate-pulse"
+                style={{ animationDuration: '4s' }}
+              />
+            );
+          })}
+        </svg>
+      )}
 
       {/* Ambient glow */}
       <div
