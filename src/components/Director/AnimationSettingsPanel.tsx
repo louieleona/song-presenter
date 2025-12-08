@@ -1,4 +1,4 @@
-import { AnimationSettings, GradientTheme, AnimationEffect } from '../../types/song';
+import { AnimationSettings, GradientTheme } from '../../types/song';
 
 interface AnimationSettingsPanelProps {
   settings: AnimationSettings;

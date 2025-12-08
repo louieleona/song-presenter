@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Song, GradientTheme, AnimationSettings } from '../../types/song';
+import { Song, AnimationSettings } from '../../types/song';
 import { exportAsMarkdown } from '../../utils/exportSession';
 import AnimationSettingsPanel from './AnimationSettingsPanel';
 import UploadZone from './UploadZone';
@@ -33,15 +33,7 @@ export default function SongList({
 }: SongListProps) {
   const [expandedSongId, setExpandedSongId] = useState<string | null>(null);
 
-  const gradientColors: Record<GradientTheme, string> = {
-    blue: 'from-blue-900 via-blue-700',
-    purple: 'from-purple-900 via-purple-700',
-    green: 'from-green-900 via-green-700',
-    orange: 'from-orange-900 via-orange-700',
-    pink: 'from-pink-900 via-pink-700',
-    cyan: 'from-cyan-900 via-cyan-700',
-  };
-
+  
   const defaultAnimationSettings: AnimationSettings = {
     effect: 'particles',
     particleCount: 60,

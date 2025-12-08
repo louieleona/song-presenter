@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Song, Session, GradientTheme, AnimationSettings } from '../../types/song';
+import { Song, Session, AnimationSettings } from '../../types/song';
 import { parseSongMarkdown } from '../../utils/markdownParser';
 import { exportAsJSON, importFromJSON } from '../../utils/exportSession';
 import { useBroadcastSync } from '../../hooks/useBroadcastSync';
