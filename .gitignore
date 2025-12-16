@@ -48,3 +48,6 @@ coverage
 #Claude
 
 .claude
+
+#Vite
+.vite
