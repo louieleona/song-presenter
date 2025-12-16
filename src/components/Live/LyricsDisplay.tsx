@@ -14,7 +14,6 @@ export default function LyricsDisplay({ part, songTitle }: LyricsDisplayProps) {
   // Calculate dynamic font size based on content length
   const getResponsiveFontSize = () => {
     const length = part.lyrics.length;
-    const lines = part.lyrics.split('\n').length;
 
     // Base sizes for different breakpoints
     if (length < 50) {
