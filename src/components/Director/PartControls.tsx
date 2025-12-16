@@ -18,20 +18,25 @@ export default function PartControls({
 }: PartControlsProps) {
   if (!song) {
     return (
-      <div className="text-center py-12 text-gray-400">
-        <p>No song selected</p>
-        <p className="text-sm mt-2">Select a song from the list to control it</p>
+      <div className="text-center py-18">
+        <div className="w-16 h-16 rounded-full bg-luxury-100 flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-luxury-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+          </svg>
+        </div>
+        <p className="text-title-3 text-luxury-700 mb-2">No song selected</p>
+        <p className="text-callout text-luxury-500">Select a song from the list to control it</p>
       </div>
     );
   }
 
   return (
     <div className="h-full flex flex-col">
-      <div className="mb-6">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">
+      <div className="mb-8">
+        <h2 className="text-headline text-luxury-900 mb-2">
           {song.title}
         </h2>
-        <p className="text-sm text-gray-500">
+        <p className="text-callout text-luxury-500">
           Click on any part to display it on the live screen
         </p>
       </div>
@@ -42,34 +47,34 @@ export default function PartControls({
           <button
             key={index}
             onClick={() => onPartSelected(index)}
-            className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+            className={`w-full text-left p-5 rounded-2xl border transition-all duration-200 ${
               currentPartIndex === index
-                ? 'border-blue-500 bg-blue-50 shadow-lg ring-2 ring-blue-200'
-                : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-md'
+                ? 'border-accent-blue/30 bg-accent-blue/5 shadow-soft-lg'
+                : 'border-luxury-200 bg-white hover:border-luxury-300 hover:shadow-soft active:scale-[0.99]'
             }`}
           >
-            <div className="flex items-start justify-between mb-2">
+            <div className="flex items-start justify-between mb-3">
               <div
-                className={`font-bold text-sm px-3 py-1 rounded-full ${
+                className={`font-semibold text-caption px-4 py-2 rounded-xl transition-all duration-200 ${
                   currentPartIndex === index
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-700'
+                    ? 'bg-accent-blue text-white shadow-soft'
+                    : 'bg-luxury-100 text-luxury-700'
                 }`}
               >
                 {getPartLabel(part)}
               </div>
               {currentPartIndex === index && (
-                <span className="text-xs text-blue-600 font-semibold flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
+                <span className="text-caption text-accent-blue font-semibold flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 bg-accent-blue rounded-full animate-pulse"></span>
                   LIVE
                 </span>
               )}
             </div>
             <div
-              className={`text-sm leading-relaxed whitespace-pre-wrap ${
+              className={`text-callout leading-relaxed whitespace-pre-wrap ${
                 currentPartIndex === index
-                  ? 'text-gray-800 font-medium'
-                  : 'text-gray-600'
+                  ? 'text-luxury-800 font-medium'
+                  : 'text-luxury-600'
               }`}
               style={{
                 display: '-webkit-box',
@@ -85,7 +90,7 @@ export default function PartControls({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex gap-2 mt-4 pt-3 border-t border-gray-200">
+      <div className="flex gap-3 mt-6 pt-6 border-t border-luxury-200/50">
         <button
           onClick={() => {
             const currentIndex = songs.findIndex(s => s.id === song.id);
@@ -94,7 +99,7 @@ export default function PartControls({
             }
           }}
           disabled={songs.findIndex(s => s.id === song.id) === 0}
-          className="flex-1 px-3 py-1.5 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+          className="flex-1 px-4 py-3 bg-luxury-100 text-luxury-700 rounded-xl hover:bg-luxury-200 disabled:opacity-40 disabled:cursor-not-allowed text-callout font-medium transition-all duration-200 active:scale-95 disabled:active:scale-100"
         >
           ← Previous Song
         </button>
@@ -106,7 +111,7 @@ export default function PartControls({
             }
           }}
           disabled={songs.findIndex(s => s.id === song.id) === songs.length - 1}
-          className="flex-1 px-3 py-1.5 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+          className="flex-1 px-4 py-3 bg-luxury-100 text-luxury-700 rounded-xl hover:bg-luxury-200 disabled:opacity-40 disabled:cursor-not-allowed text-callout font-medium transition-all duration-200 active:scale-95 disabled:active:scale-100"
         >
           Next Song →
         </button>

@@ -30,32 +30,29 @@ export default function AnimationSettingsPanel({
   };
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 mt-2">
-      <h3 className="text-gray-700 mb-2 flex items-center gap-1 text-xs">
-        🎨 Animation Settings
-      </h3>
-
-      <div className="space-y-2">
+    <div className="glass-subtle border border-luxury-200/50 rounded-2xl p-3 mt-3">
+     
+      <div className="space-y-3">
 
         {/* Background Color */}
         <div>
-          <label className="block text-xs text-gray-600 mb-0.5">
+          <label className="block text-[10px] text-luxury-600 mb-1.5 font-medium">
             Background Theme
           </label>
-          <div className="grid grid-cols-3 gap-1">
+          <div className="grid grid-cols-3 gap-1.5">
             {(['blue', 'purple', 'green', 'orange', 'pink', 'cyan'] as GradientTheme[]).map((theme) => (
               <button
                 key={theme}
                 type="button"
                 onClick={() => handleChange('backgroundColor', theme)}
-                className={`flex items-center gap-1.5 px-2 py-1 text-xs rounded border transition-all ${
+                className={`flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] rounded-lg border transition-all duration-200 ${
                   mergedSettings.backgroundColor === theme
-                    ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200'
-                    : 'border-gray-300 hover:border-gray-400'
+                    ? 'border-accent-blue/30 bg-accent-blue/5 shadow-soft'
+                    : 'border-luxury-200 hover:border-luxury-300 bg-white active:scale-95'
                 }`}
               >
                 <span
-                  className="w-3 h-3 rounded-full flex-shrink-0"
+                  className="w-3 h-3 rounded-full flex-shrink-0 shadow-inner"
                   style={{
                     background: theme === 'blue' ? '#1e3a8a' :
                                theme === 'purple' ? '#581c87' :
@@ -65,7 +62,7 @@ export default function AnimationSettingsPanel({
                                '#164e63'
                   }}
                 />
-                <span className="capitalize text-[10px]">{theme}</span>
+                <span className="capitalize text-[10px] font-medium text-luxury-700 leading-none">{theme}</span>
               </button>
             ))}
           </div>
@@ -73,8 +70,8 @@ export default function AnimationSettingsPanel({
 
         {/* Particle Count */}
         <div>
-          <label className="block text-xs text-gray-600 mb-0.5">
-            Particle Count: {mergedSettings.particleCount}
+          <label className="block text-[10px] text-luxury-600 mb-1 font-medium">
+            Particle Count: <span className="text-luxury-800">{mergedSettings.particleCount}</span>
           </label>
           <input
             type="range"
@@ -82,14 +79,14 @@ export default function AnimationSettingsPanel({
             max="150"
             value={mergedSettings.particleCount}
             onChange={(e) => handleChange('particleCount', parseInt(e.target.value))}
-            className="w-full h-1"
+            className="w-full h-1.5 bg-luxury-200 rounded-lg appearance-none cursor-pointer accent-accent-blue"
           />
         </div>
 
         {/* Particle Size */}
         <div>
-          <label className="block text-xs text-gray-600 mb-0.5">
-            Particle Size: {mergedSettings.particleSize}px
+          <label className="block text-[10px] text-luxury-600 mb-1 font-medium">
+            Particle Size: <span className="text-luxury-800">{mergedSettings.particleSize}px</span>
           </label>
           <input
             type="range"
@@ -98,14 +95,14 @@ export default function AnimationSettingsPanel({
             step="0.5"
             value={mergedSettings.particleSize}
             onChange={(e) => handleChange('particleSize', parseFloat(e.target.value))}
-            className="w-full h-1"
+            className="w-full h-1.5 bg-luxury-200 rounded-lg appearance-none cursor-pointer accent-accent-blue"
           />
         </div>
 
         {/* Speed */}
         <div>
-          <label className="block text-xs text-gray-600 mb-0.5">
-            Animation Speed: {mergedSettings.speed}
+          <label className="block text-[10px] text-luxury-600 mb-1 font-medium">
+            Animation Speed: <span className="text-luxury-800">{mergedSettings.speed}</span>
           </label>
           <input
             type="range"
@@ -113,27 +110,41 @@ export default function AnimationSettingsPanel({
             max="10"
             value={mergedSettings.speed}
             onChange={(e) => handleChange('speed', parseInt(e.target.value))}
-            className="w-full h-1"
+            className="w-full h-1.5 bg-luxury-200 rounded-lg appearance-none cursor-pointer accent-accent-blue"
           />
         </div>
 
         {/* Particle Color */}
         <div>
-          <label className="block text-xs text-gray-600 mb-0.5">
+          <label className="block text-[10px] text-luxury-600 mb-1.5 font-medium">
             Particle Color
           </label>
-          <div className="flex gap-1">
-            <input
-              type="color"
-              value={mergedSettings.particleColor}
-              onChange={(e) => handleChange('particleColor', e.target.value)}
-              className="w-12 h-6 rounded cursor-pointer"
-            />
+          <div className="flex gap-2 items-center">
+            <div className="relative">
+              <input
+                type="color"
+                value={mergedSettings.particleColor}
+                onChange={(e) => handleChange('particleColor', e.target.value)}
+                className="w-5 h-5 rounded-full cursor-pointer border-2 border-luxury-200"
+                style={{
+                  padding: 0,
+                  appearance: 'none',
+                  WebkitAppearance: 'none',
+                }}
+              />
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none shadow-inner"
+                style={{
+                  background: mergedSettings.particleColor,
+                  border: '2px solid rgba(0,0,0,0.1)'
+                }}
+              />
+            </div>
             <input
               type="text"
               value={mergedSettings.particleColor}
               onChange={(e) => handleChange('particleColor', e.target.value)}
-              className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-2 py-1.5 text-[10px] border border-luxury-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent-blue/20 focus:border-accent-blue transition-all font-mono"
               placeholder="#ffffff"
             />
           </div>
@@ -141,8 +152,8 @@ export default function AnimationSettingsPanel({
 
         {/* Particle Blur */}
         <div>
-          <label className="block text-xs text-gray-600 mb-0.5">
-            Particle Blur: {mergedSettings.particleBlur}px
+          <label className="block text-[10px] text-luxury-600 mb-1 font-medium">
+            Particle Blur: <span className="text-luxury-800">{mergedSettings.particleBlur}px</span>
           </label>
           <input
             type="range"
@@ -151,7 +162,7 @@ export default function AnimationSettingsPanel({
             step="0.5"
             value={mergedSettings.particleBlur}
             onChange={(e) => handleChange('particleBlur', parseFloat(e.target.value))}
-            className="w-full h-1"
+            className="w-full h-1.5 bg-luxury-200 rounded-lg appearance-none cursor-pointer accent-accent-blue"
           />
         </div>
       </div>

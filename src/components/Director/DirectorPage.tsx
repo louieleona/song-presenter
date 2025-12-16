@@ -137,19 +137,14 @@ export default function DirectorPage({ session, onSessionChange }: DirectorPageP
   const currentSong = session.songs.find((s) => s.id === session.currentSongId) || null;
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen flex flex-col bg-luxury-50">
       {/* Navigation */}
       <Navigation />
-
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <h1 className="text-2xl font-bold text-gray-800">Song Presenter - Director</h1>
-      </header>
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar - Song List */}
-        <aside className="w-80 bg-white border-r border-gray-200 p-4 flex flex-col">
+        <aside className="w-88 bg-white border-r border-luxury-200/50 p-6 flex flex-col">
           <SongList
             songs={session.songs}
             currentSongId={session.currentSongId}
@@ -166,7 +161,7 @@ export default function DirectorPage({ session, onSessionChange }: DirectorPageP
         </aside>
 
         {/* Main Area - Part Controls */}
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 p-8 overflow-y-auto">
           <PartControls
             song={currentSong}
             songs={session.songs}

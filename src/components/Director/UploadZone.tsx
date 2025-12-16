@@ -26,7 +26,7 @@ export default function UploadZone({ onFilesSelected }: UploadZoneProps) {
 
   return (
     <div
-      className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer"
+      className="border-2 border-dashed border-luxury-300 rounded-2xl p-8 text-center hover:border-accent-blue hover:bg-accent-blue/5 transition-all duration-200 cursor-pointer group"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onClick={() => fileInputRef.current?.click()}
@@ -39,10 +39,15 @@ export default function UploadZone({ onFilesSelected }: UploadZoneProps) {
         className="hidden"
         onChange={handleFileInput}
       />
-      <p className="text-gray-600">
+      <div className="w-12 h-12 rounded-2xl bg-luxury-100 group-hover:bg-accent-blue/10 flex items-center justify-center mx-auto mb-3 transition-colors">
+        <svg className="w-6 h-6 text-luxury-500 group-hover:text-accent-blue transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        </svg>
+      </div>
+      <p className="text-callout text-luxury-700 font-medium mb-1">
         Drop files here or click to browse
       </p>
-      <p className="text-sm text-gray-400 mt-2">
+      <p className="text-caption text-luxury-500">
         Supports .md and .json files
       </p>
     </div>
