@@ -46,7 +46,7 @@ export default function SongList({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto space-y-2">
+      <div className="flex-1 overflow-y-auto space-y-3">
         {songs.length === 0 && (
           <div className="mb-4">
             <UploadZone onFilesSelected={onFilesSelected} />
@@ -55,30 +55,32 @@ export default function SongList({
         {songs.map((song) => (
         <div
           key={song.id}
-          className={`p-3 rounded-lg border ${
+          className={`p-4 rounded-2xl border transition-all duration-200 ${
             currentSongId === song.id
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 bg-white'
+              ? 'border-accent-blue/30 bg-accent-blue/5 shadow-soft'
+              : 'border-luxury-200 bg-white hover:border-luxury-300 hover:shadow-soft'
           }`}
         >
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold text-gray-800">{song.title}</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-title-3 text-luxury-900">{song.title}</h3>
             <button
               onClick={() => onDeleteSong(song.id)}
-              className="text-gray-400 hover:text-gray-600 text-sm"
+              className="w-6 h-6 rounded-lg text-luxury-400 hover:text-luxury-600 hover:bg-luxury-100 flex items-center justify-center transition-colors"
               title="Delete song"
             >
-              ✕
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
           <div className="flex gap-2 items-center flex-wrap">
             <button
               onClick={() => onSelectSong(song.id)}
-              className={`px-3 py-1 text-sm rounded ${
+              className={`px-4 py-2 text-caption font-medium rounded-xl transition-all duration-200 ${
                 currentSongId === song.id
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-accent-blue text-white shadow-soft'
+                  : 'bg-luxury-100 text-luxury-700 hover:bg-luxury-200 active:scale-95'
               }`}
             >
               {currentSongId === song.id ? 'Live' : 'Set Live'}
@@ -86,14 +88,14 @@ export default function SongList({
 
             <button
               onClick={() => onEditSong(song)}
-              className="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+              className="px-4 py-2 text-caption font-medium bg-luxury-100 text-luxury-700 rounded-xl hover:bg-luxury-200 active:scale-95 transition-all duration-200"
             >
               Edit
             </button>
 
             <button
               onClick={() => exportAsMarkdown(song)}
-              className="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+              className="px-4 py-2 text-caption font-medium bg-luxury-100 text-luxury-700 rounded-xl hover:bg-luxury-200 active:scale-95 transition-all duration-200"
               title="Export song as MD"
             >
               Export MD
@@ -101,12 +103,15 @@ export default function SongList({
           </div>
 
           {/* Animation Settings Toggle */}
-          <div className="mt-2">
+          <div className="mt-3">
             <button
               onClick={() => setExpandedSongId(expandedSongId === song.id ? null : song.id)}
-              className="text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1"
+              className="text-caption text-luxury-600 hover:text-luxury-800 flex items-center gap-2 transition-colors"
             >
-              {expandedSongId === song.id ? '▼' : '▶'} Animation Settings
+              <svg className={`w-3 h-3 transition-transform ${expandedSongId === song.id ? 'rotate-90' : ''}`} fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+              </svg>
+              Animation Settings
             </button>
           </div>
 
@@ -122,12 +127,12 @@ export default function SongList({
 
         {songs.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-gray-400 mb-4">
+            <p className="text-body text-luxury-500 mb-4">
               No songs yet. Upload or create one!
             </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-left">
-              <p className="text-xs text-blue-900 font-medium mb-2">Important Note:</p>
-              <p className="text-xs text-blue-800">
+            <div className="glass-subtle rounded-2xl p-4 text-left border border-luxury-200/50">
+              <p className="text-caption text-luxury-800 font-semibold mb-2">Important Note:</p>
+              <p className="text-caption text-luxury-600 leading-relaxed">
                 Your collection is automatically saved to browser storage and persists between sessions.
                 Use "Export Collection" to download a backup JSON file to your computer.
                 Due to browser security, the app cannot directly overwrite files - each export creates a new download.
@@ -138,34 +143,34 @@ export default function SongList({
       </div>
 
       {/* Action Buttons - Sticky at bottom */}
-      <div className="border-t border-gray-200 pt-2 pb-1 bg-white mt-2">
-        <div className="text-center mb-2">
-          <span className="text-[10px] text-green-600 font-medium">Auto-saved</span>
+      <div className="border-t border-luxury-200/50 pt-4 mt-4">
+        <div className="text-center mb-3">
+          <span className="text-caption text-accent-green font-medium">Auto-saved</span>
         </div>
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-2 gap-2">
           <button
             onClick={onNewSong}
-            className="px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-800 text-xs"
+            className="px-3 py-2 bg-luxury-800 text-white rounded-xl hover:bg-luxury-900 text-caption font-medium transition-all duration-200 active:scale-95"
           >
             New Song
           </button>
           <button
             onClick={onExportCollection}
-            className="px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-800 text-xs"
+            className="px-3 py-2 bg-luxury-800 text-white rounded-xl hover:bg-luxury-900 text-caption font-medium transition-all duration-200 active:scale-95"
             title="Download collection as JSON file"
           >
             Export Collection
           </button>
           <button
             onClick={onImportCollection}
-            className="px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-800 text-xs"
+            className="px-3 py-2 bg-luxury-800 text-white rounded-xl hover:bg-luxury-900 text-caption font-medium transition-all duration-200 active:scale-95"
             title="Import collection from JSON file"
           >
             Import Collection
           </button>
           <button
             onClick={onNewSession}
-            className="px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-800 text-xs"
+            className="px-3 py-2 bg-luxury-800 text-white rounded-xl hover:bg-luxury-900 text-caption font-medium transition-all duration-200 active:scale-95"
             title="Clear all songs"
           >
             Clear All

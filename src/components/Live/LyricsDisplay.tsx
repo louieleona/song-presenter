@@ -11,23 +11,59 @@ export default function LyricsDisplay({ part, songTitle }: LyricsDisplayProps) {
     return null;
   }
 
+  // Calculate dynamic font size based on content length
+  const getResponsiveFontSize = () => {
+    const length = part.lyrics.length;
+
+    // Base sizes for different breakpoints
+    if (length < 50) {
+      // Very short text - larger
+      return 'text-5xl md:text-6xl lg:text-7xl';
+    } else if (length < 100) {
+      // Short text
+      return 'text-4xl md:text-5xl lg:text-6xl';
+    } else if (length < 200) {
+      // Medium text
+      return 'text-3xl md:text-4xl lg:text-5xl';
+    } else if (length < 300) {
+      // Long text
+      return 'text-2xl md:text-3xl lg:text-4xl';
+    } else {
+      // Very long text - smaller
+      return 'text-xl md:text-2xl lg:text-3xl';
+    }
+  };
+
+  // Calculate line height based on number of lines
+  const getLineHeight = () => {
+    const lines = part.lyrics.split('\n').length;
+    if (lines <= 2) return '1.4';
+    if (lines <= 4) return '1.5';
+    return '1.6';
+  };
+
   return (
-    <div className="flex items-center justify-center h-screen px-8">
-      <div className="max-w-4xl w-full text-center animate-fade-in">
-        {/* Part Label */}
-        <div className="text-white opacity-60 text-xl mb-6">
-          {getPartLabel(part)}
-        </div>
+    <div className="flex flex-col items-center justify-between h-screen p-16">
+      {/* Song Title (top) */}
+      <div className="text-white/60 text-title-3 font-medium">
+        {songTitle}
+      </div>
 
-        {/* Lyrics */}
-        <div className="text-white text-4xl md:text-5xl lg:text-6xl font-semibold leading-relaxed whitespace-pre-wrap">
-          {part.lyrics}
+      {/* Lyrics (center) */}
+      <div className="flex-1 flex items-center justify-center w-full">
+        <div className="max-w-5xl w-full text-center animate-fade-in px-8">
+          <div
+            className={`text-white ${getResponsiveFontSize()} font-semibold whitespace-pre-wrap drop-shadow-lg transition-all duration-300`}
+            style={{ lineHeight: getLineHeight() }}
+          >
+            {part.lyrics}
+          </div>
         </div>
+      </div>
 
-        {/* Song Title (subtle) */}
-        <div className="text-white opacity-40 text-sm mt-8">
-          {songTitle}
-        </div>
+      {/* Part Label (bottom) */}
+      <div className="text-white/70 text-title-2 font-medium tracking-wide">
+        {getPartLabel(part)}
       </div>
     </div>
   );
